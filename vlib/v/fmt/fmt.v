@@ -1948,6 +1948,7 @@ fn split_up_infix(infix_str string, ignore_paren bool) ([]string, []int) {
 	return conditions, penalties
 }
 
+// hi
 fn (mut f Fmt) write_splitted_infix(conditions []string, penalties []int, ignore_paren bool) {
 	for i, cnd in conditions {
 		c := cnd.trim_space()
