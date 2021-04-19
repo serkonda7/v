@@ -1,12 +1,14 @@
 name: vlib modules CI
 
 on:
+  pull_request:
   push:
     branches:
       - master
 
 jobs:
-  build-module-docs:
+  deploy-module-docs:
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
@@ -16,3 +18,13 @@ jobs:
       run: ./v doc -m -f html vlib/
     - name: Deploy docs to vercel
       run: npx vercel --confirm --prod --name vmodules --token ${{ secrets.VERCEL_TOKEN }} vlib/_docs/ || true
+
+  test-module-docs-build:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build V
+      run: make
+    - name: Build module documentation
+      run: ./v doc -m -f html vlib/
